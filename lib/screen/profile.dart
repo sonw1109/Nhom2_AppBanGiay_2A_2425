@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/widget/notify.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -65,7 +66,12 @@ class ProfileScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => NotifyDialog(),
+              );
+            },
           ),
         ],
       ),
