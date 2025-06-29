@@ -41,6 +41,36 @@ class _HomeScreenState extends State<HomeScreen> {
       'image': 'assets/images/3.png',
       'gradient': [Color(0xffF9BC90), Color(0xffFC7A5E)],
     },
+    {
+      'title': 'Nike Kyrie 1 Letterman',
+      'price': 160.99,
+      'image': 'assets/images/2.png',
+      'gradient': [Color(0xff5EFC8D), Color(0xff61FC5E)],
+    },
+    {
+      'title': 'Nike Kyrie 1 Letterman',
+      'price': 160.99,
+      'image': 'assets/images/1.png',
+      'gradient': [Color(0xff90CAF9), Color(0xff5ED6FC)],
+    },
+    {
+      'title': 'Nike Kyrie 1 Letterman',
+      'price': 160.99,
+      'image': 'assets/images/3.png',
+      'gradient': [Color(0xff5EFC8D), Color(0xff61FC5E)],
+    },
+    {
+      'title': 'Nike Kyrie 1 Letterman',
+      'price': 160.99,
+      'image': 'assets/images/2.png',
+      'gradient': [Color(0xffF9BC90), Color(0xffFC7A5E)],
+    },
+    {
+      'title': 'Nike Kyrie 1 Letterman',
+      'price': 160.99,
+      'image': 'assets/images/1.png',
+      'gradient': [Color(0xff90CAF9), Color(0xff5ED6FC)],
+    },
   ];
 
   @override
@@ -111,13 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Text("Experience Fashion with Our Shoe Lineup"),
               SizedBox(height: 50.w),
               SearchBar(
-                padding: WidgetStateProperty.all(
-                  EdgeInsets.symmetric(horizontal: 16),
-                ),
-                leading: Text(
-                  "Search",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
+                leading: Text("Search", style: TextStyle(fontWeight: FontWeight.bold)),
                 trailing: [Icon(Icons.search)],
               ),
             ],
@@ -145,10 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
               margin: const EdgeInsets.only(right: 8.0),
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               decoration: BoxDecoration(
-                color:
-                    _selectedCategory == _categories[index]
-                        ? Colors.black
-                        : Colors.white,
+                color: _selectedCategory == _categories[index] ? Colors.black : Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
                 border: Border.all(color: Colors.black12, width: 1.0),
               ),
@@ -158,10 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w500,
-                    color:
-                        _selectedCategory == _categories[index]
-                            ? Colors.white
-                            : Colors.black,
+                    color: _selectedCategory == _categories[index] ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -248,22 +267,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     '\$${price.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.sp,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
                   ),
                   Container(
                     padding: EdgeInsets.all(6.w),
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.add_shopping_cart,
-                      size: 16.w,
-                      color: Colors.white,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+                    child: Icon(Icons.add_shopping_cart, size: 16.w, color: Colors.white),
                   ),
                 ],
               ),
@@ -281,10 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Container(
               padding: EdgeInsets.all(4.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: Icon(Icons.favorite, size: 18.w, color: Colors.red),
             ),
           ),
@@ -295,10 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
           top: -5.w,
           left: 0,
           right: 0,
-          child: SizedBox(
-            height: 140.w,
-            child: Image.asset(imageUrl, fit: BoxFit.contain),
-          ),
+          child: SizedBox(height: 140.w, child: Image.asset(imageUrl, fit: BoxFit.contain)),
         ),
       ],
     );

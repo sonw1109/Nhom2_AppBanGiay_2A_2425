@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project/screen/welcome.dart';
-import 'package:project/widget/bottom.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +14,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: const WelcomeScreen(),
-        );
+        return MaterialApp(debugShowCheckedModeBanner: false, home: const WelcomeScreen());
       },
     );
   }

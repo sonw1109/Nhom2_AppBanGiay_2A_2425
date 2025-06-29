@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:project/screen/home.dart';
 import 'package:project/widget/bottom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +13,23 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoginMode = true;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
+  final _formKey = GlobalKey<FormState>();
+
+  // Khởi tạo các TextEditingController ở cấp instance
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Hủy các controller để tránh rò rỉ bộ nhớ
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -27,54 +43,121 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your phone number';
+    }
+    final phoneRegex = RegExp(r'^\d{10}$');
+    if (!phoneRegex.hasMatch(value)) {
+      return 'Please enter a valid 10-digit phone number';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    final passwordRegex = RegExp(r'^[a-zA-Z0-9]+$');
+    if (!passwordRegex.hasMatch(value)) {
+      return 'Password cannot contain special characters';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String? value, String password) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (value != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            SizedBox(height: _isLoginMode ? 0 : 25.w),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTextField("Email", Icons.email, false, null),
-                  if (!_isLoginMode) ...[
-                    SizedBox(height: 16.w),
-                    _buildTextField("Phone Number", Icons.phone, false, null),
-                  ],
-                  SizedBox(height: 16.w),
-                  _buildTextField(
-                    "Password",
-                    Icons.lock,
-                    !_passwordVisible,
-                    _togglePasswordVisibility,
-                  ),
-                  if (!_isLoginMode) ...[
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              SizedBox(height: _isLoginMode ? 0 : 25.w),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTextField(
+                      "Email",
+                      Icons.email,
+                      false,
+                      null,
+                      _emailController,
+                      _validateEmail,
+                    ),
+                    if (!_isLoginMode) ...[
+                      SizedBox(height: 16.w),
+                      _buildTextField(
+                        "Phone Number",
+                        Icons.phone,
+                        false,
+                        null,
+                        _phoneController,
+                        _validatePhone,
+                      ),
+                    ],
                     SizedBox(height: 16.w),
                     _buildTextField(
-                      "Confirm Password",
+                      "Password",
                       Icons.lock,
-                      !_confirmPasswordVisible,
-                      _toggleConfirmPasswordVisibility,
+                      !_passwordVisible,
+                      _togglePasswordVisibility,
+                      _passwordController,
+                      _validatePassword,
                     ),
+                    if (!_isLoginMode) ...[
+                      SizedBox(height: 16.w),
+                      _buildTextField(
+                        "Confirm Password",
+                        Icons.lock,
+                        !_confirmPasswordVisible,
+                        _toggleConfirmPasswordVisibility,
+                        _confirmPasswordController,
+                        (value) => _validateConfirmPassword(value, _passwordController.text),
+                      ),
+                    ],
+                    SizedBox(height: 16.w),
+                    if (_isLoginMode) ...[
+                      _buildRememberForgot(),
+                      SizedBox(height: 30.w),
+                    ] else
+                      SizedBox(height: 30.w),
+                    _buildActionButton(_emailController, _passwordController),
+                    SizedBox(height: 16.w),
+                    _buildToggleOption(),
                   ],
-                  SizedBox(height: 16.w),
-                  if (_isLoginMode) ...[
-                    _buildRememberForgot(),
-                    SizedBox(height: 30.w),
-                  ] else
-                    SizedBox(height: 30.w),
-                  _buildActionButton(),
-                  SizedBox(height: 16.w),
-                  _buildToggleOption(),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -120,23 +203,25 @@ class _LoginScreenState extends State<LoginScreen> {
     IconData icon,
     bool obscureText,
     Function? toggleVisibility,
+    TextEditingController controller,
+    String? Function(String?) validator,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
         SizedBox(height: 4.w),
-        TextField(
+        TextFormField(
+          controller: controller,
           obscureText: obscureText,
+          validator: validator,
           decoration: InputDecoration(
             hintText: "Enter your $label",
             prefixIcon: Icon(icon),
             suffixIcon:
                 label.contains("Password")
                     ? IconButton(
-                      icon: Icon(
-                        obscureText ? Icons.visibility : Icons.visibility_off,
-                      ),
+                      icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
                       onPressed: () {
                         if (toggleVisibility != null) {
                           toggleVisibility();
@@ -144,12 +229,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     )
                     : null,
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.redAccent),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
-            ),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)),
           ),
         ),
       ],
@@ -168,24 +251,24 @@ class _LoginScreenState extends State<LoginScreen> {
         Spacer(),
         Text(
           "Forgot Password?",
-          style: TextStyle(
-            color: Colors.redAccent,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
         ),
       ],
     );
   }
 
-  Widget _buildActionButton() {
+  Widget _buildActionButton(
+    TextEditingController emailController,
+    TextEditingController passwordController,
+  ) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CustomBottomNavigationBar(),
-          ),
-        );
+        if (_formKey.currentState!.validate()) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const CustomBottomNavigationBar()),
+          );
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xffff8383),
@@ -205,9 +288,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          _isLoginMode ? "Don't have an account?" : "Already have an account?",
-        ),
+        Text(_isLoginMode ? "Don't have an account?" : "Already have an account?"),
         SizedBox(width: 8.w),
         GestureDetector(
           onTap: () {
@@ -217,10 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: Text(
             _isLoginMode ? "Sign Up" : "Sign In",
-            style: TextStyle(
-              color: Colors.redAccent,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
           ),
         ),
       ],
