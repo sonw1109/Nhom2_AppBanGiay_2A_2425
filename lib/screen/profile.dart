@@ -21,34 +21,22 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 60,
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/150?img=3',
-                  ),
+                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=3'),
                 ),
                 Positioned(
                   bottom: 0,
                   right: 4,
                   child: Container(
                     padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.edit,
-                      color: Colors.black,
-                      size: 20,
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 20),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'John Doe',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
+          const Text('John Doe', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const Text('johndoe@email.com', style: TextStyle(color: Colors.grey)),
           const SizedBox(height: 30),
           ListTile(
@@ -64,13 +52,16 @@ class ProfileScreen extends StatelessWidget {
             onTap: () {},
           ),
           ListTile(
+            leading: const Icon(Icons.edit_document),
+            title: const Text('Term Of Uses'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {},
+          ),
+          ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => NotifyDialog(),
-              );
+              showDialog(context: context, builder: (context) => NotifyDialog());
             },
           ),
         ],
