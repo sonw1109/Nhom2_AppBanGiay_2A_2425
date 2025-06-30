@@ -26,46 +26,45 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _pages),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blueAccent,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 14,
-        unselectedFontSize: 12,
-        iconSize: 26,
-        showUnselectedLabels: true,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.home_outlined)),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        color: Color(0xffEFFFFE),
+        child: SizedBox(
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(Icons.home, Icons.home_outlined, 0),
+              _buildNavItem(Icons.search, Icons.search_outlined, 1),
+              _buildNavItem(Icons.favorite, Icons.favorite_outline, 2),
+              _buildNavItem(Icons.settings, Icons.settings_outlined, 3),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.search_outlined)),
-            activeIcon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.shopping_cart_outlined),
-            ),
-            activeIcon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.person_outline)),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData activeIcon, IconData inactiveIcon, int index) {
+    bool isSelected = _currentIndex == index;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.black : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          isSelected ? activeIcon : inactiveIcon,
+          color: isSelected ? Colors.white : Colors.grey,
+          size: 24,
+        ),
       ),
     );
   }
