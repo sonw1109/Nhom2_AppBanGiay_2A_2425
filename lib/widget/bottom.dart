@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/model/product_model.dart';
 import 'package:project/screen/cart.dart';
 import 'package:project/screen/home.dart';
+import 'package:project/screen/notification.dart';
 import 'package:project/screen/profile.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -16,7 +17,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Center(child: Text('Search Screen')),
+    NotificationsScreen(),
     CartScreen(product: ProductModel()),
     ProfileScreen(),
   ];
